@@ -138,10 +138,10 @@ test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1), target_var),
 
 # Compile a function performing a training step on a mini-batch (by giving
 # the updates dictionary) and returning the corresponding training loss:
-train_fn = theano.function([input_var, target_var], loss, updates=updates)
+train_fn = theano.function([input_var, target_var], loss, updates=updates, allow_input_downcast=True)
 
 # Compile a second function computing the validation loss and accuracy:
-val_fn = theano.function([input_var, target_var], [test_loss, test_acc])
+val_fn = theano.function([input_var, target_var], [test_loss, test_acc], allow_input_downcast=True)
 
 
 # ############################# Batch iterator ###############################
