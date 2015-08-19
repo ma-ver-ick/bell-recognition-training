@@ -1,5 +1,4 @@
 from scipy.io.wavfile import read, write
-from pylab import plot, show, subplot, specgram
 import numpy
 import random
 import math
