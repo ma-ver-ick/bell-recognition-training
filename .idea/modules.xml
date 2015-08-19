@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/ring-recognition-training.iml" filepath="$PROJECT_DIR$/.idea/ring-recognition-training.iml" />
+      <module fileurl="file:///Volumes/HaleBopp/Code/Python/bell-recognition-training/.idea/bell-recognition-training.iml" filepath="/Volumes/HaleBopp/Code/Python/bell-recognition-training/.idea/bell-recognition-training.iml" />
     </modules>
   </component>
 </project>
