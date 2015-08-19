@@ -165,6 +165,8 @@ for epoch in range(num_epochs):
     print("  validation accuracy:\t\t{:.2f} %".format(
         val_acc / val_batches * 100))
 
+    # np.savez('delete-epoch-' + str(epoch) + '.npz', lasagne.layers.get_all_param_values(network))
+
 # After training, we compute and print the test error:
 test_err = 0
 test_acc = 0

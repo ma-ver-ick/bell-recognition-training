@@ -12,6 +12,8 @@ import lasagne
 
 import traindata_mix
 
+print "Preparing data..."
+
 # prepare data
 complete_x = list()
 complete_y = list()
@@ -67,6 +69,9 @@ complete_y = None
 
 print X_train.shape, y_train.shape
 # (8000, 1, 1, 2)
+
+print "Preparing theano, lasagne structures..."
+
 
 def build_mlp(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
@@ -205,6 +210,8 @@ for epoch in range(num_epochs):
     print("  validation accuracy:\t\t{:.2f} %".format(
         val_acc / val_batches * 100))
 
+    np.savez('test_mlp_001-epoch-' + str(epoch) + '.npz', lasagne.layers.get_all_param_values(network))
+
 # After training, we compute and print the test error:
 test_err = 0
 test_acc = 0
@@ -223,5 +230,5 @@ print("  test accuracy:\t\t{:.2f} %".format(
 # Optionally, you could now dump the network weights to a file like this:
 # np.savez('model.npz', lasagne.layers.get_all_param_values(network))
 
-np.savez('test_mlp_001.npz', lasagne.layers.get_all_param_values(network))
+np.savez('test_mlp_001-final.npz', lasagne.layers.get_all_param_values(network))
 
