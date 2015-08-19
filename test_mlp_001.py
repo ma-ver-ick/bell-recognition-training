@@ -223,5 +223,5 @@ print("  test accuracy:\t\t{:.2f} %".format(
 # Optionally, you could now dump the network weights to a file like this:
 # np.savez('model.npz', lasagne.layers.get_all_param_values(network))
 
-print lasagne.layers.get_all_param_values(network)
+np.savez('test_mlp_001.npz', lasagne.layers.get_all_param_values(network))
 

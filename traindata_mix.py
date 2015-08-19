@@ -177,6 +177,12 @@ if __name__ == "__main__":
     # third test - p2
     # temp = list()
     # for position, fft, c in test_data_iterator(RING_01_TEST_DATA):
-    #     temp.append((position, fft, c))
+    #     blah = [position]
+    #     blah.extend(fft.tolist())
+    #     blah.append(c)
+    #     temp.append(blah)
+
+    # temp = numpy.array(temp)
+    # numpy.savez_compressed('delete_me.npz', temp)
 
     # print "completed"

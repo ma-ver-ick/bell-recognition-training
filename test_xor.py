@@ -6,6 +6,7 @@ import theano.tensor as T
 import time
 
 import lasagne
+import pickle
 
 num_epochs = 300
 mini_batch_size = 1000
@@ -181,6 +182,3 @@ print("  test accuracy:\t\t{:.2f} %".format(
 
 # Optionally, you could now dump the network weights to a file like this:
 # np.savez('model.npz', lasagne.layers.get_all_param_values(network))
-
-print lasagne.layers.get_all_param_values(network)
-
