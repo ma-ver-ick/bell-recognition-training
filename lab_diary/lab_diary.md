@@ -62,3 +62,12 @@ Further ideas:
 
 Resulting file size is still over 3GB when pickled, but can now be iterated
 
+# Training the neural net
+
+## V1 - Neural net of 128 - 128*5 - 128*5 - 2
+
+* Uses a network with two hidden layers which count of neurons are multiples of the window size of the fft (also the frequencies).
+* Two hidden layers just for fun.
+* The train, val and test data are cut from the 01_ring.wav by taking a good look on it and using the easiest path to cut the data.
+* So far, THEANO uses all CPU's and easily more than 19GB of RAM. Searching for something to cut down RAM usage (or using a larger machine...)
+
