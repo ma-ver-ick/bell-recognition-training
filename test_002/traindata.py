@@ -26,6 +26,15 @@ def generate_spectogram_iterator(data, window=256, multiplier=1.0, filter=None):
         yield i, fft_data
 
 
+def divider_iterator(input_iterator, divider=1):
+    i = 0
+    for element in input_iterator:
+        if i % divider == 0:
+            yield element
+
+        i += 1
+
+
 def test_data_iterator(file_name, window=256, divider=2):
     """
 
@@ -54,28 +63,35 @@ def test_data_iterator(file_name, window=256, divider=2):
 
         yield position, fft, c
 
+
+def generate_hdf5_file(input_file_name, output_file_name, divider=2, scaling=4096, window=256):
+    with h5py.File(output_file_name + ".hdf5", "w") as f:
+        rate, data = read(input_file_name + ".wav")
+
+        new_data = list()
+        for i in range(0, len(data), divider):
+            new_data.append(data[i])
+
+        complete = list()
+        for position, fft in generate_spectogram_iterator(new_data, window):
+            temp = fft * scaling
+            temp = numpy.asarray(temp, dtype=numpy.int32)
+            if len(temp) == window*2:  # real + imaginary
+                complete.append(temp)
+
+            if position % 10000 == 9999:
+                print position
+                break
+
+        complete = numpy.asarray(complete)
+        f.create_dataset("dataset", data=complete, compression="lzf", dtype=numpy.int32, shuffle=True)
+
+
+
 # generate fft for easy loading afterwards
 
-file_name = RING_02_TEST_DATA
-divider = 2
-
-with h5py.File(file_name + ".hdf5", "w") as f:
-    rate, data = read(file_name + ".wav")
-
-    complete = list()
-    for position, fft, c in test_data_iterator(file_name):
-        temp = fft
-        temp = numpy.asarray(temp, dtype=numpy.int32)
-        if len(temp) == 512:
-            complete.append(temp)
-
-        if position % 10000 == 9999:
-            print position
-
-    complete = numpy.asarray(complete)
-    f.create_dataset("dataset", data=complete, compression="lzf", dtype=numpy.int32, shuffle=True)
-
-
+generate_hdf5_file(RING_01_TEST_DATA, "01_ring", divider=2)
+generate_hdf5_file(RING_02_TEST_DATA, "02_ring", divider=2)
 
 
 

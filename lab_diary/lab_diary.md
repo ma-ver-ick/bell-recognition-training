@@ -5,13 +5,15 @@
 
 ## Restrictions
 
-* Seems that the teensy can only do a window of 256 samples (without running out of memory).
+* Seems that the teensy can only do a fft-window of 256 samples (without running out of memory).
 
 ## Steps
 
 ### view_waveform.py
 
-#### Data
+#### Data (01_ring)
+
+Quiet, only a few noise in the beginning.
 
 * Bell 1 (1050210-1277290)
     * Tone 1: 1050210 - 1088990
@@ -29,6 +31,11 @@
     * Tone 1: 2068090 - 2106850
     * Tone 2:  - 2145600
     * Tone 3:  - 2295410
+
+#### Data (02_ring)
+
+Star Trek Voyager in the living room at room levels. A bit of 'silent' vacuum cleaning and then four bells in the end (with voyager still running, but the vacuum not).
+
 
 # Mini-Analysis
 
