@@ -64,10 +64,20 @@ Resulting file size is still over 3GB when pickled, but can now be iterated
 
 # Training the neural net
 
-## V1 - Neural net of 128 - 128*5 - 128*5 - 2
+## test_001 - Neural net of 128 - 128*5 - 128*5 - 2
 
+__Thoughts:__
+* Used 01_ring.wav
 * Uses a network with two hidden layers which count of neurons are multiples of the window size of the fft (also the frequencies).
 * Two hidden layers just for fun.
 * The train, val and test data are cut from the 01_ring.wav by taking a good look on it and using the easiest path to cut the data.
 * So far, THEANO uses all CPU's and easily more than 19GB of RAM. Searching for something to cut down RAM usage (or using a larger machine...)
 
+__Results:__
+* Larger machine found a solution with a accuracy of 87.30 %
+    * Used Amazon EC2, with 32 CPU's and a huge junk of memory (only around 10GB was used) and used around 3000 minutes of CPU time (top) = $12.11
+* Large junks of no bell sounds where recognized also, will have to look at the data if these audio-frames can actually be differentiated with the given FFT data.
+* Second figure shows the neural net on a new set of data (nn was not trained, validated, tested on). The four large (partly green) blocks at the end are the door bell.
+
+![Results using the resulting NN. Green shows the output of the NN when it's considering the audio signal the bell it was trained on.](01_figure.png)
+![New data set with four door bell sounds at the end. There was a vacuum cleaner and Star Trek Voyager as background or upfront.](02_figure.png)

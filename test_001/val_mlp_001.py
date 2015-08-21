@@ -71,7 +71,7 @@ predict_fn = theano.function([input_var], T.argmax(test_prediction, axis=1))
 complete_x = list()
 complete_y = list()
 
-for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
+for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_02_TEST_DATA):
     try:
         complete_x.append(predict_fn([[[fft]]]) * 10000)
     except:
@@ -79,7 +79,7 @@ for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_T
         complete_x.append(0)
     complete_x.append(0)
 
-rate, data = read(traindata_mix.RING_01_TEST_DATA + ".wav")
+rate, data = read(traindata_mix.RING_02_TEST_DATA + ".wav")
 
 plot(range(0, len(data)), data)
 plot(range(0, len(complete_x)), complete_x)

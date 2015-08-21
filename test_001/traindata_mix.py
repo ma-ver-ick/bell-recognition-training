@@ -4,7 +4,8 @@ import random
 import math
 import pickle
 
-RING_01_TEST_DATA = 'data/01_ring'
+RING_01_TEST_DATA = '../data/01_ring'
+RING_02_TEST_DATA = '../data/02_ring'
 
 
 def shuffle(data, window, deck=None):
