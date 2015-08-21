@@ -89,11 +89,20 @@ __Results:__
 ![Results using the resulting NN. Green shows the output of the NN when it's considering the audio signal the bell it was trained on.](01_figure.png)
 ![New data set with four door bell sounds at the end. There was a vacuum cleaner and Star Trek Voyager as background or upfront.](02_figure.png)
 
-## test_002 - Neural net of 256 - 256*2 - 256*2 - 2
+## test_002 - Neural net of 512 - 256*2 - 256*2 - 2
 
 __Setup:__
 
-* There seems to be a plateau around 87% (test_002), this may have many many causes. I have picked the following: The remaining test samples look very similar to each other and it's very hard to differentiate between them.
+* There seems to be a plateau around 87% (test_002), this may have many many causes. I have picked the following: 
+    * The remaining test samples look very similar to each other and it's very hard to differentiate between them.
+    * The NN seems to have a harder time on the validation data vs the training data. So I switched both sets (and should rethink the distribution as it's entirely abitary).
 * FFT uses now the full real and imaginary data. No scaling, no filter just plain FFT (as I now have access to a very large computer this is possible). See traindata_mix.generate_spectogram_iterator.
+
+__First Try:__
+
+* Overfitting: Choose examples randomly from the dataset and make sure that every set (train, val, test) have the same ratio of doorbell vs. not-doorbell.
+
+
+## test_002-2 Neural net of 512 - 256 - 256 - 2
 
 

@@ -116,7 +116,7 @@ def generate_spectogram_iterator(data, window=256, multiplier=1.0/65536.0, filte
     """
     """
 
-    for i in range(0, len(data)):
+    for i in range(0, len(data) - window):
         fft_data = numpy.fft.fft(data[i:i+window])
         # fft_data = fft_data[0:window/2.0]
         fft_data = numpy.array([numpy.real(fft_data), numpy.imag(fft_data)]).flatten()

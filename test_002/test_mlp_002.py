@@ -6,6 +6,7 @@ import numpy as np
 import theano
 import theano.tensor as T
 
+import sys
 import pickle
 import time
 
@@ -16,36 +17,103 @@ import traindata_mix
 print "Preparing data..."
 sys.stdout.flush()
 
+num_epochs = 3000
+mini_batch_size = 20000
+
 # prepare data
 complete_x = list()
 complete_y = list()
 
+complete_y_true = 0
+complete_y_false = 0
+
 for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
     complete_x.append([[fft]])
     complete_y.append(c)
-
-num_epochs = 3000
-mini_batch_size = 20000
+    if c == 0:
+        complete_y_false += 1
+    if c == 1:
+        complete_y_true += 1
 
 complete_x_len = len(complete_x)
 
-end_part_1 = int(math.floor(complete_x_len / 2.0))
+ratio = float(complete_y_true) / float(complete_y_false)
+#       1435137          450590           984547
+print len(complete_x), complete_y_true, complete_y_false, ratio
 
-start_part_2 = int(math.floor(complete_x_len / 4.0)) * 2
-end_part_2 = int(math.floor(complete_x_len / 4.0)) * 3
+temp_sum_true = 0
+temp_sum_false = 0
+temp_indices = np.arange(len(complete_x))
+np.random.shuffle(temp_indices)
 
-start_part_3 = int(math.floor(complete_x_len / 4.0)) * 3
-end_part_3 = complete_x_len
+X_train = list()
+y_train = list()
+for i in range(0, int(len(temp_indices) * 0.75)):
+    fft = complete_x[temp_indices[i]]
+    res = complete_y[temp_indices[i]]
 
-X_train = np.array(complete_x[0:end_part_1])
-y_train = np.array(complete_y[0:end_part_1], dtype=np.uint8)
+    cur_ratio = float(temp_sum_true) / (float(temp_sum_false) + 1)
+    add = False
+    if cur_ratio > ratio and res == 0:
+        add = True
+    elif cur_ratio < ratio and res == 1:
+        add = True
+    else:
+        add = True
 
-X_val = np.array(complete_x[start_part_2:end_part_2])
-y_val = np.array(complete_y[start_part_2:end_part_2], dtype=np.uint8)
+    if add:
+        X_train.append(fft)
+        y_train.append(res)
 
-X_test = np.array(complete_x[start_part_3:end_part_3])
-y_test = np.array(complete_y[start_part_3:end_part_3], dtype=np.uint8)
+        if res == 0:
+            temp_sum_false += 1
+        elif res == 1:
+            temp_sum_true += 1
 
+print len(X_train), temp_sum_true, temp_sum_false, float(temp_sum_true)/float(temp_sum_false)
+
+temp_sum_true = 0
+temp_sum_false = 0
+temp_indices = np.arange(len(complete_x))
+np.random.shuffle(temp_indices)
+
+X_val = list()
+y_val = list()
+for i in range(0, int(len(temp_indices) * 0.25)):
+    fft = complete_x[temp_indices[i]]
+    res = complete_y[temp_indices[i]]
+
+    cur_ratio = float(temp_sum_true) / (float(temp_sum_false) + 1)
+    add = False
+    if cur_ratio > ratio and res == 0:
+        add = True
+    elif cur_ratio < ratio and res == 1:
+        add = True
+    else:
+        add = True
+
+    if add:
+        X_val.append(fft)
+        y_val.append(res)
+
+        if res == 0:
+            temp_sum_false += 1
+        elif res == 1:
+            temp_sum_true += 1
+
+print len(X_val), temp_sum_true, temp_sum_false, float(temp_sum_true)/float(temp_sum_false)
+
+X_test = np.array(complete_x)
+y_test = np.array(complete_y)
+
+X_val = np.array(X_val)
+y_val = np.array(y_val)
+
+print len(X_train)
+X_train = np.array(X_train)
+print X_train.shape
+
+y_train = np.array(y_train)
 
 # count how many true samples are in each set
 y_train_true = 0
@@ -76,6 +144,7 @@ print X_train.shape, y_train.shape
 print "Preparing theano, lasagne structures..."
 sys.stdout.flush()
 
+
 def build_mlp(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
     # a softmax output layer of 10 units. It applies 20% dropout to the input
@@ -86,7 +155,7 @@ def build_mlp(input_var=None):
     # Input layer, specifying the expected input shape of the network
     # (unspecified batchsize, 1 channel, 28 rows and 28 columns) and
     # linking it to the given Theano variable `input_var`, if any:
-    l_in = lasagne.layers.InputLayer(shape=(None, 1, 1, window_size),
+    l_in = lasagne.layers.InputLayer(shape=(None, 1, 1, window_size * 2),
                                      input_var=input_var)
 
     # Apply 20% dropout to the input data:
