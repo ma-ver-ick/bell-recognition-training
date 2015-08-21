@@ -14,6 +14,7 @@ import lasagne
 import traindata_mix
 
 print "Preparing data..."
+sys.stdout.flush()
 
 # prepare data
 complete_x = list()
@@ -73,7 +74,7 @@ print X_train.shape, y_train.shape
 # (8000, 1, 1, 2)
 
 print "Preparing theano, lasagne structures..."
-
+sys.stdout.flush()
 
 def build_mlp(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
@@ -182,6 +183,8 @@ def iterate_minibatches(inputs, targets, batchsize, shuffle=False):
 
 # Finally, launch the training loop.
 print("Starting training...")
+sys.stdout.flush()
+
 # We iterate over epochs:
 for epoch in range(num_epochs):
     # In each epoch, we do a full pass over the training data:
@@ -211,6 +214,7 @@ for epoch in range(num_epochs):
     print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
     print("  validation accuracy:\t\t{:.2f} %".format(
         val_acc / val_batches * 100))
+    sys.stdout.flush()
 
     np.savez('test_mlp_002-epoch-' + str(epoch) + '.npz', lasagne.layers.get_all_param_values(network))
 
@@ -228,6 +232,7 @@ print("Final results:")
 print("  test loss:\t\t\t{:.6f}".format(test_err / test_batches))
 print("  test accuracy:\t\t{:.2f} %".format(
     test_acc / test_batches * 100))
+sys.stdout.flush()
 
 # Optionally, you could now dump the network weights to a file like this:
 # np.savez('model.npz', lasagne.layers.get_all_param_values(network))
