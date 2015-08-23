@@ -106,3 +106,61 @@ __First Try:__
 ## test_002-2 Neural net of 512 - 256 - 256 - 2
 
 
+# Neural Nets and the Photon!
+
+## Testing XOR
+
+#include "math.h"
+
+Code
+
+
+    void setup() {
+        Serial.begin(9600);
+        Serial.println("Hello Computer");
+        
+    }
+    
+    
+    void loop() {
+        unsigned long before = millis();    
+        for(int i = 0; i < 10000; i++) {
+            evaluate(10, 100);
+        }
+        unsigned long after = millis();
+        unsigned long diff = after-before;
+        Serial.println("time for 10000 = " + String(diff));
+    }
+    
+    int evaluate(float input_0, float input_1) {
+        // layer: 0, name: None
+        float n_out_0_0 = sigmoid( (-0.113556) * input_0 + (1.952280) * input_1 + (-0.420871));
+        float n_out_0_1 = sigmoid( (-4.699653) * input_0 + (-4.362170) * input_1 + (1.333518));
+        float n_out_0_2 = sigmoid( (0.372461) * input_0 + (-3.111637) * input_1 + (0.791882));
+        float n_out_0_3 = sigmoid( (-0.955691) * input_0 + (-0.507858) * input_1 + (0.082308));
+        float n_out_0_4 = sigmoid( (-4.293386) * input_0 + (2.813902) * input_1 + (-1.384903));
+        // layer: 1, name: None
+        float n_out_1_0 = (2.430914) * n_out_0_0 + (3.643128) * n_out_0_1 + (-2.860000) * n_out_0_2 + (-0.248841) * n_out_0_3 + (-3.294573) * n_out_0_4 + (0.221753);
+        float n_out_1_1 = (-0.724163) * n_out_0_0 + (-4.231144) * n_out_0_1 + (2.033271) * n_out_0_2 + (0.699811) * n_out_0_3 + (2.863805) * n_out_0_4 + (-0.221753);
+    
+        if(n_out_1_0 > n_out_1_1) { return 1; }
+        else if(n_out_1_1 > n_out_1_0) { return 0; }
+    
+        return -1;
+    }
+    
+    float sigmoid(float in) {
+        return 1 / (1 + exp(in));   
+    }
+´´´
+
+Result:
+
+
+    time for 10000 = 1768
+
+
+* 10.000 Evaluations with 1/(1+exp(in)) need 1.768 seconds (it has to be <<< 1s!)
+* 10.000.000 Evaluations with ´´´return in;´´´ take 0 seconds
+* 10.000.000 Evaluations with ´´´1/(1+in)´´´ take 0 seconds
+* 10.000.000 Evaluations of the 10000000 take 0 seconds

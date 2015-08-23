@@ -137,7 +137,7 @@ def test_data_iterator(file_name, window=256, divider=2):
     data_file_name = file_name + ".pickle"
 
     rate, data = read(wav_file_name)
-    true_areas = numpy.array(pickle.load(open(data_file_name, 'r'))) // divider
+    true_areas = numpy.array([])  # pickle.load(open(data_file_name, 'r'))) // divider
 
     new_data = list()
     for i in range(0, len(data), divider):

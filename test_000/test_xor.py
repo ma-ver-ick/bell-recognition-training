@@ -35,6 +35,10 @@ X_test = X_train
 y_test = y_train
 
 
+def my_activation(x):
+    return x / (1. + abs(x))
+
+
 def build_mlp(input_var=None):
     # This creates an MLP of two hidden layers of 800 units each, followed by
     # a softmax output layer of 10 units. It applies 20% dropout to the input
@@ -53,7 +57,7 @@ def build_mlp(input_var=None):
     # initializing weights with Glorot's scheme (which is the default anyway):
     l_hid1 = lasagne.layers.DenseLayer(
             l_in, num_units=5,
-            nonlinearity=lasagne.nonlinearities.sigmoid,
+            nonlinearity=my_activation,
             W=lasagne.init.GlorotUniform())
 
     # Finally, we'll add the fully-connected output layer, of 10 softmax units:
@@ -183,4 +187,4 @@ print("  test accuracy:\t\t{:.2f} %".format(
     test_acc / test_batches * 100))
 
 # Optionally, you could now dump the network weights to a file like this:
-# np.savez('model.npz', lasagne.layers.get_all_param_values(network))
+np.savez('model.npz', lasagne.layers.get_all_param_values(network))

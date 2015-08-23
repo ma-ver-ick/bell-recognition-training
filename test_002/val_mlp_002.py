@@ -16,7 +16,9 @@ import lasagne
 import traindata_mix
 
 
-FILE = '150821_1700/test_mlp_002-epoch-31.npz'
+FILE = '150821_1700_overfit/test_mlp_002-epoch-31.npz'
+FILE = '150821_2200/test_mlp_002-epoch-12.npz'
+FILE = '150821_2200_512-256-256-2/test_mlp_002-epoch-77.npz'
 
 
 def build_mlp(input_var=None):
@@ -38,12 +40,12 @@ def build_mlp(input_var=None):
     # Add a fully-connected layer of 800 units, using the linear rectifier, and
     # initializing weights with Glorot's scheme (which is the default anyway):
     l_hid_1 = lasagne.layers.DenseLayer(
-            l_in, num_units=window_size * 2,
+            l_in, num_units=window_size,
             nonlinearity=lasagne.nonlinearities.sigmoid,
             W=lasagne.init.GlorotUniform())
 
     l_hid_2 = lasagne.layers.DenseLayer(
-            l_hid_1, num_units=window_size * 2,
+            l_hid_1, num_units=window_size,
             nonlinearity=lasagne.nonlinearities.sigmoid,
             W=lasagne.init.GlorotUniform())
 
@@ -72,7 +74,7 @@ predict_fn = theano.function([input_var], T.argmax(test_prediction, axis=1))
 complete_x = list()
 complete_y = list()
 
-for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
+for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_02_TEST_DATA):
     try:
         complete_x.append(predict_fn([[[fft]]]) * 10000)
     except:
@@ -80,7 +82,7 @@ for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_T
         complete_x.append(0)
     complete_x.append(0)
 
-rate, data = read(traindata_mix.RING_01_TEST_DATA + ".wav")
+rate, data = read(traindata_mix.RING_02_TEST_DATA + ".wav")
 
 plot(range(0, len(data)), data)
 plot(range(0, len(complete_x)), complete_x)
