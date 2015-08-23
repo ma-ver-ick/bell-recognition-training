@@ -146,8 +146,12 @@ sys.stdout.flush()
 
 
 def my_activation(input):
-    x = round(input, 5)
-    abs_x = abs(x)
+    d = 5
+
+    input = input * T.power(10, d)
+    input = T.round(input)
+    x = input / T.power(10, d)
+    abs_x = T.abs(x)
 
     return x / (1. + abs_x)
 
