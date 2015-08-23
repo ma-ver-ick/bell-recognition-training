@@ -59,30 +59,44 @@ def build_mlp(input_var=None):
 
 # Prepare Theano variables for inputs and targets
 input_var = T.tensor4('inputs')
+target_var = T.ivector('targets')
 
 # restore network
 network = build_mlp(input_var)
 network_parameters = np.load(FILE)
 lasagne.layers.set_all_param_values(network, network_parameters['arr_0'])
 
+# Create a loss expression for validation/testing. The crucial difference
+# here is that we do a deterministic forward pass through the network,
+# disabling dropout layers.
+test_prediction = lasagne.layers.get_output(network, deterministic=True)
+test_loss = lasagne.objectives.categorical_crossentropy(test_prediction,
+                                                        target_var)
+test_loss = test_loss.mean()
+# As a bonus, also create an expression for the classification accuracy:
+test_acc = T.mean(T.eq(T.argmax(test_prediction, axis=1), target_var),
+                  dtype=theano.config.floatX)
+
 # prepare prediction
 test_prediction = lasagne.layers.get_output(network, deterministic=True)
 predict_fn = theano.function([input_var], T.argmax(test_prediction, axis=1))
 
-complete_x = list()
-complete_y = list()
+# Compile a second function computing the validation loss and accuracy:
+val_fn = theano.function([input_var, target_var], [test_loss, test_acc], allow_input_downcast=True)
 
-for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
-    try:
-        complete_x.append(predict_fn([[[fft]]]) * 10000)
-    except:
-        print position, fft
-        complete_x.append(0)
-    complete_x.append(0)
+# complete_x = list()
+# complete_y = list()
+#
+# for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_02_TEST_DATA):
+#     try:
+#         complete_x.append(predict_fn([[[fft]]]) * 10000)
+#     except:
+#         print position, fft
+#         complete_x.append(0)
+#     complete_x.append(0)
 
-rate, data = read(traindata_mix.RING_01_TEST_DATA + ".wav")
-
-plot(range(0, len(data)), data)
-plot(range(0, len(complete_x)), complete_x)
-
-show()
+# rate, data = read(traindata_mix.RING_02_TEST_DATA + ".wav")
+#
+# plot(range(0, len(data)), data)
+# plot(range(0, len(complete_x)), complete_x)
+# show()
