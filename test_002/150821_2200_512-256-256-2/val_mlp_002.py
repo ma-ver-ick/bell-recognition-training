@@ -38,7 +38,7 @@ def build_mlp(input_var=None):
     # Add a fully-connected layer of 800 units, using the linear rectifier, and
     # initializing weights with Glorot's scheme (which is the default anyway):
     l_hid_1 = lasagne.layers.DenseLayer(
-            l_in, num_units=window_size * 2,
+            l_in, num_units=window_size,
             nonlinearity=lasagne.nonlinearities.sigmoid,
             W=lasagne.init.GlorotUniform())
 

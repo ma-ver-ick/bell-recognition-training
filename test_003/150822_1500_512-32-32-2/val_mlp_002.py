@@ -18,11 +18,20 @@ import traindata_mix
 
 FILE = '150821_1700_overfit/test_mlp_002-epoch-31.npz'
 FILE = '150821_2200/test_mlp_002-epoch-12.npz'
-FILE = '150822_2200_512_256-256-2-my-acti/test_mlp_002-epoch-98.npz'
+FILE = 'test_mlp_003-epoch-27.npz'
 
 
-def my_activation(x):
-    return x / (1. + abs(x))
+def my_activation(input):
+    # d = 2
+
+    # input = input * T.power(10, d)
+    # input = T.round(input)
+    x = input # / T.power(10, d)
+    abs_x = abs(x)
+
+    ret =  x / (1. + abs_x)
+    # ret = T.round(ret * T.power(10, d)) / T.power(10, d)
+    return ret
 
 
 def build_mlp(input_var=None):
@@ -44,12 +53,12 @@ def build_mlp(input_var=None):
     # Add a fully-connected layer of 800 units, using the linear rectifier, and
     # initializing weights with Glorot's scheme (which is the default anyway):
     l_hid_1 = lasagne.layers.DenseLayer(
-            l_in, num_units=window_size,
+            l_in, num_units=32,
             nonlinearity=my_activation,
             W=lasagne.init.GlorotUniform())
 
     l_hid_2 = lasagne.layers.DenseLayer(
-            l_hid_1, num_units=window_size,
+            l_hid_1, num_units=32,
             nonlinearity=my_activation,
             W=lasagne.init.GlorotUniform())
 
@@ -77,35 +86,18 @@ predict_fn = theano.function([input_var], T.argmax(test_prediction, axis=1))
 
 complete_x = list()
 complete_y = list()
-a = 0
-correct = 0
-wrong = 0
 
-for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
+for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_02_TEST_DATA):
     try:
-        r = predict_fn([[[fft]]])
-        if c > 0:
-            a += 1
-        if r > 0 and c > 0:
-            correct += 1
-
-        if c > 0 >= r:
-            wrong += 1
-
-        complete_x.append(r * 10000)
+        complete_x.append(predict_fn([[[fft]]]) * 10000)
     except:
         print position, fft
         complete_x.append(0)
-        complete_x.append(0)
+    complete_x.append(0)
 
-rate, data = read(traindata_mix.RING_01_TEST_DATA + ".wav")
+rate, data = read(traindata_mix.RING_02_TEST_DATA + ".wav")
 
 plot(range(0, len(data)), data)
 plot(range(0, len(complete_x)), complete_x)
+
 show()
-
-print a
-print correct
-print wrong
-
-

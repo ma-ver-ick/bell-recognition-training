@@ -1,0 +1,82 @@
+Preparing data...
+1434881 0 1434881 0.0
+1076160 0 1076160 0.0
+358720 0 358720 0.0
+1076160
+(1076160, 1, 1, 512)
+len= 1434881 y_train_true= 0 y_val_true= 0 y_test_true= 0
+(1076160, 1, 1, 512) (1076160,)
+Preparing theano, lasagne structures...
+Starting training...
+Epoch 1 of 3000 took 55.180s
+  training loss:		0.487475
+  validation loss:		0.231090
+  validation accuracy:		99.74 %
+Epoch 2 of 3000 took 57.222s
+  training loss:		0.144180
+  validation loss:		0.088404
+  validation accuracy:		100.00 %
+Epoch 3 of 3000 took 55.164s
+  training loss:		0.068914
+  validation loss:		0.053790
+  validation accuracy:		100.00 %
+Epoch 4 of 3000 took 54.996s
+  training loss:		0.046082
+  validation loss:		0.039233
+  validation accuracy:		100.00 %
+Epoch 5 of 3000 took 54.313s
+  training loss:		0.034991
+  validation loss:		0.030974
+  validation accuracy:		100.00 %
+Epoch 6 of 3000 took 54.249s
+  training loss:		0.028238
+  validation loss:		0.025551
+  validation accuracy:		100.00 %
+Epoch 7 of 3000 took 56.121s
+  training loss:		0.023633
+  validation loss:		0.021710
+  validation accuracy:		100.00 %
+Epoch 8 of 3000 took 55.399s
+  training loss:		0.020292
+  validation loss:		0.018849
+  validation accuracy:		100.00 %
+Epoch 9 of 3000 took 56.791s
+  training loss:		0.017761
+  validation loss:		0.016631
+  validation accuracy:		100.00 %
+Epoch 10 of 3000 took 54.146s
+  training loss:		0.015760
+  validation loss:		0.014859
+  validation accuracy:		100.00 %
+Epoch 11 of 3000 took 54.530s
+  training loss:		0.014150
+  validation loss:		0.013413
+  validation accuracy:		100.00 %
+Epoch 12 of 3000 took 53.853s
+  training loss:		0.012821
+  validation loss:		0.012202
+  validation accuracy:		100.00 %
+Epoch 13 of 3000 took 55.747s
+  training loss:		0.011707
+  validation loss:		0.011187
+  validation accuracy:		100.00 %
+Epoch 14 of 3000 took 55.163s
+  training loss:		0.010766
+  validation loss:		0.010318
+  validation accuracy:		100.00 %
+Epoch 15 of 3000 took 54.105s
+  training loss:		0.009954
+  validation loss:		0.009566
+  validation accuracy:		100.00 %
+Epoch 16 of 3000 took 54.266s
+  training loss:		0.009249
+  validation loss:		0.008910
+  validation accuracy:		100.00 %
+Epoch 17 of 3000 took 54.766s
+  training loss:		0.008633
+  validation loss:		0.008339
+  validation accuracy:		100.00 %
+Epoch 18 of 3000 took 53.906s
+  training loss:		0.008091
+  validation loss:		0.007828
+  validation accuracy:		100.00 %

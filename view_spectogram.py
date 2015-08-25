@@ -2,7 +2,7 @@ from scipy.io.wavfile import read, write
 import numpy as np
 from pylab import plot, show, subplot, specgram
 
-rate, data = read('data/01_ring.wav')
+rate, data = read('data/02_ring.wav')
 
 data = np.delete(data, np.arange(0, data.size, 2))
 

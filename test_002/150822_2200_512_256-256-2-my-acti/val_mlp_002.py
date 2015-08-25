@@ -16,7 +16,11 @@ import lasagne
 import traindata_mix
 
 
-FILE = '150821_1700/test_mlp_002-epoch-31.npz'
+FILE = 'test_mlp_002-epoch-98.npz'
+
+
+def my_activation(x):
+    return x / (1. + abs(x))
 
 
 def build_mlp(input_var=None):
@@ -38,13 +42,13 @@ def build_mlp(input_var=None):
     # Add a fully-connected layer of 800 units, using the linear rectifier, and
     # initializing weights with Glorot's scheme (which is the default anyway):
     l_hid_1 = lasagne.layers.DenseLayer(
-            l_in, num_units=window_size * 2,
-            nonlinearity=lasagne.nonlinearities.sigmoid,
+            l_in, num_units=window_size,
+            nonlinearity=my_activation,
             W=lasagne.init.GlorotUniform())
 
     l_hid_2 = lasagne.layers.DenseLayer(
-            l_hid_1, num_units=window_size * 2,
-            nonlinearity=lasagne.nonlinearities.sigmoid,
+            l_hid_1, num_units=window_size,
+            nonlinearity=my_activation,
             W=lasagne.init.GlorotUniform())
 
     # Finally, we'll add the fully-connected output layer, of 10 softmax units:
@@ -84,19 +88,35 @@ predict_fn = theano.function([input_var], T.argmax(test_prediction, axis=1))
 # Compile a second function computing the validation loss and accuracy:
 val_fn = theano.function([input_var, target_var], [test_loss, test_acc], allow_input_downcast=True)
 
-# complete_x = list()
-# complete_y = list()
-#
-# for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_02_TEST_DATA):
-#     try:
-#         complete_x.append(predict_fn([[[fft]]]) * 10000)
-#     except:
-#         print position, fft
-#         complete_x.append(0)
-#     complete_x.append(0)
+complete_x = list()
+complete_y = list()
+a = 0
+correct = 0
+wrong = 0
 
-# rate, data = read(traindata_mix.RING_02_TEST_DATA + ".wav")
-#
-# plot(range(0, len(data)), data)
-# plot(range(0, len(complete_x)), complete_x)
-# show()
+for position, fft, c in traindata_mix.test_data_iterator(traindata_mix.RING_01_TEST_DATA):
+    try:
+        r = predict_fn([[[fft]]])
+        if c > 0:
+            a += 1
+        if r > 0 and c > 0:
+            correct += 1
+
+        if c > 0 >= r:
+            wrong += 1
+
+        complete_x.append(r * 10000)
+    except:
+        print position, fft
+        complete_x.append(0)
+        complete_x.append(0)
+
+rate, data = read(traindata_mix.RING_01_TEST_DATA + ".wav")
+
+plot(range(0, len(data)), data)
+plot(range(0, len(complete_x)), complete_x)
+show()
+
+print a
+print correct
+print wrong
